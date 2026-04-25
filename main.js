@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkoutBar = document.getElementById('checkout-bar');
   const checkoutTotal = document.getElementById('checkout-total');
   const btnCheckout = document.getElementById('btn-checkout');
-  const whatsappNumber = "5512991733156"; // Altere para o número real
+  const whatsappNumber = "5512992189414"; // Novo número atualizado
 
   function updateCheckout() {
     let total = 0;
