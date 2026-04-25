@@ -323,7 +323,7 @@
                 
                 <div class="input-group">
                     <label for="maint-time">Horário</label>
-                    <input type="time" id="maint-time" class="schedule-input" step="600" onclick="this.showPicker()" required>
+                    <input type="time" id="maint-time" class="schedule-input" min="08:00" max="21:00" step="600" onclick="this.showPicker()" required>
                 </div>
                 
                 <button class="btn-whatsapp" id="btn-confirm-maint" style="width: 100%; justify-content: center; margin-top: 1rem; opacity: 0.5; pointer-events: none;">Agendar Manutenção</button>
@@ -346,7 +346,7 @@
                 
                 <div class="input-group">
                     <label for="schedule-time">Horário</label>
-                    <input type="time" id="schedule-time" class="schedule-input" step="600" onclick="this.showPicker()" required>
+                    <input type="time" id="schedule-time" class="schedule-input" min="08:00" max="21:00" step="600" onclick="this.showPicker()" required>
                 </div>
                 
                 <button class="btn-whatsapp" id="btn-confirm-schedule" style="width: 100%; justify-content: center; margin-top: 1rem;">Confirmar Agendamento</button>

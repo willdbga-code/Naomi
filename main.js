@@ -387,4 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.getElementById('year');
   if(yearEl) yearEl.innerText = new Date().getFullYear();
 
+  // Limita a data mínima para hoje nos calendários
+  const today = new Date().toISOString().split('T')[0];
+  if (maintDate) maintDate.min = today;
+  if (scheduleDate) scheduleDate.min = today;
+
 });
