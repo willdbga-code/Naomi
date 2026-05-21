@@ -9,6 +9,9 @@
 </head>
 <body>
     
+    <!-- Cursor Personalizado (Apenas Desktop) -->
+    <div class="cursor-dot" id="custom-cursor-dot"></div>
+    <div class="cursor-ring" id="custom-cursor-ring"></div>
     <!-- Navbar -->
     <nav class="nav" id="navbar">
         <div class="nav-left">
@@ -19,14 +22,15 @@
         <div class="nav-right">
             <a href="#tips" class="nav-link">Dicas</a>
             <a href="#" class="nav-link btn-nav-maintenance">Manutenções</a>
-    </nav>
+        </div>
 
-    <!-- Botão Hamburger Mobile (Independente do nav para sobrepor o overlay) -->
-    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+        <!-- Botão Hamburger Mobile (Fica dentro do nav para alinhamento perfeito por flexbox, e o nav tem z-index elevado) -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
 
     <!-- Overlay do Menu Mobile -->
     <div class="mobile-menu-overlay" id="mobile-menu-overlay">
@@ -41,6 +45,8 @@
 
     <!-- Hero Section -->
     <header class="hero" id="hero">
+        <!-- Partículas douradas decorativas -->
+        <div class="hero-particles" id="hero-particles"></div>
         <video class="hero-video" autoplay muted loop playsinline poster="hero-video.mp4.mp4">
             <source src="hero-video.mp4.mp4" type="video/mp4">
         </video>
@@ -66,11 +72,17 @@
                 
                 <div class="about-grid">
                     <div class="about-card">
+                        <div class="about-card-img-wrapper">
+                            <img src="assets/naomi.jpg" alt="Naomi Domoto" class="about-card-img" loading="lazy">
+                        </div>
                         <span class="eyebrow">Naomi Domoto</span>
                         <h3 class="h-medium">22 anos</h3>
                         <p>Sou Lash designer e designer de sobrancelhas há cerca de 3 anos. Amo trazer a autoestima e poder para as mulheres, por isso me apaixonei pela área da beleza.</p>
                     </div>
                     <div class="about-card">
+                        <div class="about-card-img-wrapper">
+                            <img src="assets/isabelle.jpg" alt="Isabelle Moura" class="about-card-img" loading="lazy">
+                        </div>
                         <span class="eyebrow">Isabelle Moura</span>
                         <h3 class="h-medium">20 anos</h3>
                         <p>Escolhi essa área porque amo trazer a autoestima das mulheres e sou apaixonada por beleza. Faço sempre um trabalho com excelência e profissionalismo!</p>

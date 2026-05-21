@@ -154,8 +154,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
   function toggleMobileMenu() {
-    mobileMenuBtn.classList.toggle('open');
-    mobileMenuOverlay.classList.toggle('active');
+    const isOpen = mobileMenuBtn.classList.toggle('open');
+    if (isOpen) {
+      mobileMenuOverlay.classList.add('active');
+      // Anima os links de menu de forma progressiva e espetacular com stagger
+      gsap.fromTo(mobileNavLinks, 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "back.out(1.2)", delay: 0.35, overwrite: "auto" }
+      );
+    } else {
+      mobileMenuOverlay.classList.remove('active');
+      gsap.to(mobileNavLinks, { opacity: 0, y: 15, duration: 0.3, ease: "power2.in", overwrite: "auto" });
+    }
   }
 
   if (mobileMenuBtn && mobileMenuOverlay) {
@@ -165,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       link.addEventListener('click', () => {
         mobileMenuBtn.classList.remove('open');
         mobileMenuOverlay.classList.remove('active');
+        gsap.to(mobileNavLinks, { opacity: 0, y: 15, duration: 0.3, ease: "power2.in", overwrite: "auto" });
       });
     });
   }
@@ -175,6 +186,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkoutTotal = document.getElementById('checkout-total');
   const btnCheckout = document.getElementById('btn-checkout');
   const whatsappNumber = "5512992189414"; // Novo número atualizado
+
+  let currentTotalVal = 0;
+  function animateCounter(targetValue) {
+    const obj = { val: currentTotalVal };
+    gsap.to(obj, {
+      val: targetValue,
+      duration: 0.6,
+      ease: "power2.out",
+      onUpdate: () => {
+        checkoutTotal.innerText = `R$ ${obj.val.toFixed(2).replace('.', ',')}`;
+      }
+    });
+    currentTotalVal = targetValue;
+  }
 
   function updateCheckout() {
     let total = 0;
@@ -190,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (total > 0) {
       // Exibe a barra
       checkoutBar.classList.add('visible');
-      checkoutTotal.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      animateCounter(total);
 
       // Gera a mensagem base para o WhatsApp
       let baseMessage = "Olá, Naomi Domoto! Gostaria de agendar/orçar os seguintes procedimentos:\n\n";
@@ -205,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // Esconde a barra se nada estiver selecionado
       checkoutBar.classList.remove('visible');
+      animateCounter(0);
       btnCheckout.href = "#";
     }
   }
@@ -294,6 +320,20 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedMaintName = "";
   let selectedMaintPrice = 0;
 
+  let currentMaintVal = 0;
+  function animateMaintCounter(targetValue) {
+    const obj = { val: currentMaintVal };
+    gsap.to(obj, {
+      val: targetValue,
+      duration: 0.6,
+      ease: "power2.out",
+      onUpdate: () => {
+        maintTotalEl.innerText = `R$ ${obj.val.toFixed(2).replace('.', ',')}`;
+      }
+    });
+    currentMaintVal = targetValue;
+  }
+
   function updateMaintTotal() {
     selectedMaintPrice = 0;
     selectedMaintName = "";
@@ -305,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    maintTotalEl.innerText = `R$ ${selectedMaintPrice.toFixed(2).replace('.', ',')}`;
+    animateMaintCounter(selectedMaintPrice);
 
     if (selectedMaintPrice > 0) {
       btnConfirmMaint.style.opacity = "1";
@@ -391,5 +431,217 @@ document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   if (maintDate) maintDate.min = today;
   if (scheduleDate) scheduleDate.min = today;
+
+  // ==========================================
+  // NOVOS MÓDULOS DE ANIMAÇÃO E INTERATIVIDADE
+  // ==========================================
+
+  // 1. Partículas do Hero (Brilhos dourados flutuantes)
+  const particlesContainer = document.getElementById('hero-particles');
+  if (particlesContainer) {
+    const numParticles = 20;
+    for (let i = 0; i < numParticles; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      const randomLeft = Math.random() * 100;
+      const randomDelay = Math.random() * 8;
+      const randomDuration = 6 + Math.random() * 6;
+      const randomScale = 0.4 + Math.random() * 0.8;
+      
+      particle.style.left = `${randomLeft}%`;
+      particle.style.animationDelay = `${randomDelay}s`;
+      particle.style.animationDuration = `${randomDuration}s`;
+      particle.style.transform = `scale(${randomScale})`;
+      
+      particlesContainer.appendChild(particle);
+    }
+  }
+
+  // 2. Parallax no Vídeo do Hero
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo) {
+    const isMobile = window.innerWidth <= 900;
+    gsap.to(heroVideo, {
+      yPercent: isMobile ? 6 : 15,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: isMobile ? 0.5 : true
+      }
+    });
+  }
+
+  // 3. Scroll Reveal das Seções
+  // 3.1 Fade-in de headers (eyebrow, h2, subtextos) por seção
+  const sections = document.querySelectorAll('section');
+  sections.forEach(section => {
+    const headings = section.querySelectorAll('.eyebrow, .h-large, .category-title, p[style*="color: var(--text-sub)"]');
+    if (headings.length > 0) {
+      gsap.from(headings, {
+        opacity: 0,
+        y: 25,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 85%",
+          toggleActions: "play none none none"
+        }
+      });
+    }
+  });
+
+  // 3.2 Revelação individual e resiliente de cada card ao rolar a tela (About, Tips e Catálogo)
+  // IMPORTANTE: Seleciona apenas os service-cards no catálogo para evitar os service-cards ocultos dentro de modais/overlays (manutenção)
+  const cards = document.querySelectorAll('.about-card, .tip-card, .catalog-grid .service-card');
+  cards.forEach(card => {
+    gsap.from(card, {
+      opacity: 0,
+      y: 35,
+      duration: 0.8,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: card,
+        start: "top 92%", // Dispara de forma individual quando cada card entra no viewport
+        toggleActions: "play none none none"
+      },
+      onComplete: () => {
+        // Limpa as propriedades inline após a animação de reveal para que os hovers CSS originais funcionem 100%
+        gsap.set(card, { clearProps: "opacity,y,transform" });
+      }
+    });
+  });
+
+  // 4. Tilt 3D & Glow nos Cards (About & Tips)
+  const cards3d = document.querySelectorAll('.about-card, .tip-card');
+  cards3d.forEach(card => {
+    const glow = document.createElement('div');
+    glow.classList.add('card-glow');
+    card.appendChild(glow);
+
+    // Ativa apenas no Desktop para melhor desempenho e evitar conflito com touch
+    if (window.innerWidth > 900) {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = -(y - centerY) / 12;
+        const rotateY = (x - centerX) / 12;
+
+        gsap.to(card, {
+          rotateX: rotateX,
+          rotateY: rotateY,
+          scale: 1.02,
+          duration: 0.3,
+          ease: "power2.out",
+          transformPerspective: 1000
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          scale: 1,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      });
+    }
+  });
+
+  // 5. Ripple nos cliques dos service-cards do catálogo
+  const serviceCards = document.querySelectorAll('.service-card');
+  serviceCards.forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.tagName === 'INPUT') return;
+      
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const ripple = document.createElement('span');
+      ripple.classList.add('card-ripple');
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      
+      const existingRipples = card.querySelectorAll('.card-ripple');
+      existingRipples.forEach(r => r.remove());
+      
+      card.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 850);
+    });
+  });
+
+  // 6. Cursor Decorativo Personalizado (Apenas Desktop)
+  const cursorDot = document.getElementById('custom-cursor-dot');
+  const cursorRing = document.getElementById('custom-cursor-ring');
+  
+  if (cursorDot && cursorRing && window.innerWidth > 900) {
+    document.body.classList.add('custom-cursor-active');
+    
+    const dotX = gsap.quickTo(cursorDot, "left", { duration: 0.1, ease: "power3.out" });
+    const dotY = gsap.quickTo(cursorDot, "top", { duration: 0.1, ease: "power3.out" });
+    const ringX = gsap.quickTo(cursorRing, "left", { duration: 0.35, ease: "power3.out" });
+    const ringY = gsap.quickTo(cursorRing, "top", { duration: 0.35, ease: "power3.out" });
+    
+    let isCursorVisible = false;
+    
+    window.addEventListener('mousemove', (e) => {
+      if (!isCursorVisible) {
+        gsap.to([cursorDot, cursorRing], { opacity: 1, duration: 0.3 });
+        isCursorVisible = true;
+      }
+      
+      dotX(e.clientX);
+      dotY(e.clientY);
+      ringX(e.clientX);
+      ringY(e.clientY);
+    });
+    
+    document.addEventListener('mouseleave', () => {
+      gsap.to([cursorDot, cursorRing], { opacity: 0, duration: 0.3 });
+      isCursorVisible = false;
+    });
+    
+    document.addEventListener('mouseenter', () => {
+      gsap.to([cursorDot, cursorRing], { opacity: 1, duration: 0.3 });
+      isCursorVisible = true;
+    });
+    
+    const interactiveSelectors = 'a, button, label, input, .service-card';
+    document.querySelectorAll(interactiveSelectors).forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.classList.add('hovered');
+        cursorDot.classList.add('hovered');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.classList.remove('hovered');
+        cursorDot.classList.remove('hovered');
+      });
+    });
+  }
+
+  // 7. Shrink da Navbar no Mobile ao rolar a página
+  if (window.innerWidth <= 900) {
+    ScrollTrigger.create({
+      start: "top -50px", // Quando rola mais de 50px
+      onEnter: () => nav.classList.add('nav-scrolled'),
+      onLeaveBack: () => nav.classList.remove('nav-scrolled')
+    });
+  }
 
 });
